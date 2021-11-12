@@ -30,4 +30,11 @@ pipeline {
             }
         }
     }
+    post {
+        always {
+            echo 'Limpando diretorios'
+            sh './jenkins/build/mvn.sh mvn clean'
+	    deleteDir()
+        }
+    }
 }
