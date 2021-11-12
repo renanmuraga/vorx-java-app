@@ -2,10 +2,13 @@ pipeline {
     agent any
     
     environment {
-     PASS = credentials('registry-pass')
+      PASS = credentials('registry-pass')
     }
-
+ 
     stages {
+        stage('Cleanup') {
+            deleteDir()
+        }
         stage('Build') {
             steps {
                 sh '''
@@ -28,6 +31,13 @@ pipeline {
             steps {
                 sh './jenkins/deploy/deploy.sh'
             }
+        }
+    }
+    post {
+        always {
+            echo 'Limpando diretorios'
+            sh './jenkins/build/mvn.sh mvn clean'
+	    deleteDir()
         }
     }
 }
